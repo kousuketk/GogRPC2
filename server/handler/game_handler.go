@@ -15,7 +15,7 @@ type GameHandler struct {
 	client map[int32][]api.GameService_PlayServer
 }
 
-func NewGameHnadler() *GameHandler {
+func NewGameHandler() *GameHandler {
 	return &GameHandler{
 		games:  make(map[int32]*game.Game),
 		client: make(map[int32][]api.GameService_PlayServer),

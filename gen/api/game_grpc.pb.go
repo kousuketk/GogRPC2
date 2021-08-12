@@ -65,7 +65,7 @@ func (x *gameServicePlayClient) Recv() (*PlayResponse, error) {
 // for forward compatibility
 type GameServiceServer interface {
 	Play(GameService_PlayServer) error
-	mustEmbedUnimplementedGameServiceServer()
+	// mustEmbedUnimplementedGameServiceServer()
 }
 
 // UnimplementedGameServiceServer must be embedded to have forward compatible implementations.

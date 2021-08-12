@@ -66,7 +66,7 @@ func (x *matchingServiceJoinRoomClient) Recv() (*JoinRoomResponse, error) {
 // for forward compatibility
 type MatchingServiceServer interface {
 	JoinRoom(*JoinRoomRequest, MatchingService_JoinRoomServer) error
-	mustEmbedUnimplementedMatchingServiceServer()
+	// mustEmbedUnimplementedMatchingServiceServer()
 }
 
 // UnimplementedMatchingServiceServer must be embedded to have forward compatible implementations.

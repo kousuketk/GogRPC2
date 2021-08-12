@@ -11,10 +11,10 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/kousuketk/GogRPC2/gen/api"
-	"github.com/kousuketk/GogRPC2/gen/handler"
+	"github.com/kousuketk/GogRPC2/server/handler"
 )
 
-func (main) {
+func main() {
 	port := 50051
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
@@ -37,5 +37,5 @@ func (main) {
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 	log.Println("stopping gRPC server...")
-	server.GraceullStop()
+	server.GracefulStop()
 }

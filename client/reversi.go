@@ -55,7 +55,7 @@ func (r *Reversi) run() error {
 	}
 
 	r.game = game.NewGame(r.me.Color)
-	return r.play(ctx, api.NewGameService(conn))
+	return r.play(ctx, api.NewGameServiceClient(conn))
 }
 
 func (r *Reversi) matching(ctx context.Context, cli api.MatchingServiceClient) error {
@@ -100,7 +100,7 @@ func (r *Reversi) play(ctx context.Context, cli api.GameServiceClient) error {
 		}
 	}()
 
-	err := r.recieve(c, stream)
+	err = r.recieve(c, stream)
 	if err != nil {
 		cancel()
 		return err
@@ -153,7 +153,7 @@ func (r *Reversi) send(ctx context.Context, stream api.GameService_PlayClient) e
 			}
 			r.Lock()
 			_, err = r.game.Move(x, y, r.me.Color)
-			u.Unlock()
+			r.Unlock()
 			if err != nil {
 				fmt.Println(err)
 				continue
@@ -221,7 +221,7 @@ func parseInput(txt string) (int32, int32, error) {
 	return x, int32(y), nil
 }
 
-func (r *Reversi) reciev(ctx context.Context, stream api.GameService_PlayClient) error {
+func (r *Reversi) recieve(ctx context.Context, stream api.GameService_PlayClient) error {
 	for {
 		res, err := stream.Recv()
 		if err != nil {
@@ -236,9 +236,8 @@ func (r *Reversi) reciev(ctx context.Context, stream api.GameService_PlayClient)
 			r.game.Display(r.me.Color)
 		case *api.PlayResponse_Move:
 			color := build.Color(res.GetMove().GetPlayer().GetColor())
-			if color != r.me.color {
-			move:
-				res.GetMove().GetMove()
+			if color != r.me.Color {
+				move := res.GetMove().GetMove()
 				r.game.Move(move.GetX(), move.GetY(), color)
 				fmt.Print("Input Your Move (ex. A-1):")
 			}
@@ -251,7 +250,7 @@ func (r *Reversi) reciev(ctx context.Context, stream api.GameService_PlayClient)
 			} else if winner == r.me.Color {
 				fmt.Println("You Win!")
 			} else {
-				fmt.Prinln("You Lose!")
+				fmt.Println("You Lose!")
 			}
 			r.Unlock()
 			return nil
