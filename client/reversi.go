@@ -59,7 +59,7 @@ func (r *Reversi) run() error {
 }
 
 func (r *Reversi) matching(ctx context.Context, cli api.MatchingServiceClient) error {
-	stream, err := cli.JoinRoom(ctx, &api.JoinRoomRequest{})
+	stream, err := cli.JoinRoom(ctx, &api.JoinRoomRequest{}) // JoinRoomのgRPCメソッドを叩いて、recv()でstreamを待っている
 	if err != nil {
 		return err
 	}
@@ -67,7 +67,7 @@ func (r *Reversi) matching(ctx context.Context, cli api.MatchingServiceClient) e
 
 	fmt.Println("Requested matching...")
 	for {
-		resp, err := stream.Recv()
+		resp, err := stream.Recv() // ひたすらstreamを待つ(matchedになるまで待っている), ここのstreamを送るのはhandler
 		if err != nil {
 			return err
 		}
